@@ -1,4 +1,4 @@
-import { Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import styles from './styles'
 import { useState } from 'react';
 import Participant from '../../components/Participant';
@@ -9,17 +9,34 @@ export default function Home() {
 
   function handleAddParticipant() {
     if (text === '') return
+
+    const normalizedText = text.toLowerCase()
+    const normalizedList = list.map(item => item.toLowerCase())
+
+    if (normalizedList.includes(normalizedText)) {
+      Alert.alert('Participante já adicionado', 'Verifique se o nome inserido está correto.')
+      return
+    }
+
     setList(((state) => [...state, text]))
     setText('')
   }
 
   function deleteParticipant(name: string) {
     const index = list.indexOf(name)
-    if (index !== -1) {
-      const updateList = [...list]
-      updateList.splice(index, 1)
-      setList(updateList)
-    }
+    Alert.alert(
+      'Remover participante?',
+      `Tem certeza que deseja remover o participante: ${name}?`,
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+          onPress: () => { return }
+        },
+        
+      ]
+    )
+      
   }
 
   return (
